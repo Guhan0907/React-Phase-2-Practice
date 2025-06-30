@@ -4,7 +4,8 @@ import './index.css';
 import App from './App.jsx';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home/Home.jsx';
-import ItemDetails from './pages/ItemDetails/ItemDetails.jsx';
+import ItemDetailsFunction from './pages/ItemDetails/ItemDetails.jsx';
+import FilteredItemsByCategoryFunction from './pages/FilteredItems/FilteredItemsByCategory.jsx';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const rout = createBrowserRouter([
@@ -13,9 +14,13 @@ const rout = createBrowserRouter([
     element: <App />,
   },
   {
-    path: '/:id',
-    element: <ItemDetails />,
+    path: '/meals/:id',
+    element: <ItemDetailsFunction />,
   },
+  {
+    path : "/category/:str",
+    element : <FilteredItemsByCategoryFunction />
+  }
 ]);
 
 const themeObj = createTheme({

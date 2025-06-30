@@ -140,6 +140,32 @@
   margin-top: 2rem;
 }
 
+.reset-filters-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #6a1b9a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.reset-filters-btn:hover {
+  background-color: #4a0072;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #007bff;
+    /* text-color1 */
+}
+
 /* Responsive text */
 @media (max-width: 768px) {
   .meals-heading {
