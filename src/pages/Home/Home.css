@@ -1,0 +1,157 @@
+/* Layout */
+.meals-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.meals-heading {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+/* Filters */
+.filter-box {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 600px;
+  background-color: #fafafa;
+}
+
+.filter-box h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.filter-box label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+.filter-box select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.filter-done-btn {
+  margin-top: 1.5rem;
+  padding: 0.5rem 1.2rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.filter-done-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Grid layout using Flex */
+.meals-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Meal card */
+.meals-card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  flex: 1 1 280px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.meals-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.meals-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.meals-card-content {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.meals-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+
+.meals-category,
+.meals-area {
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+  color: #555;
+}
+
+/* No data found */
+.No-data-Found-img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  text-align: center;
+}
+
+.No-data-Found-img img {
+  max-width: 100%;
+  height: auto;
+  width: 400px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+/* Error */
+.meals-error {
+  color: red;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+/* Responsive text */
+@media (max-width: 768px) {
+  .meals-heading {
+    font-size: 1.5rem;
+  }
+
+  .meals-title {
+    font-size: 1.1rem;
+  }
+
+  .meals-category,
+  .meals-area {
+    font-size: 0.9rem;
+  }
+}
