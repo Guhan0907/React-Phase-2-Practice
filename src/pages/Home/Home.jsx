@@ -1,8 +1,26 @@
 import React, { Component } from "react";
 import "./Home.css";
-import { countries } from "../../constants/homeConstants";
-import { Link, useNavigate } from "react-router-dom";
+import { countries, countriesFlag } from "../../constants/homeConstants";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import {
+  Chip,
+  Stack,
+  Avatar,
+  TextField,
+  Pagination,
+  Button,
+  Snackbar,
+  SnackbarContent,
+} from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCartOutlined";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+
+import Shimmer from "../Shimmer/Shimmer";
 
 class Home extends Component {
   constructor(props) {
@@ -14,20 +32,34 @@ class Home extends Component {
       selectedCountry: "",
       selectedType: "",
       filteredMeals: [],
-      searchTerm : ""
+      searchTerm: props.queryParam,
+      categories: [],
+      selectedCategory: "",
+      countries: countriesFlag,
+      page: 1,
+      itemsPerPage: 6,
+      showSnackbar: false,
+      snackbarMessage: "",
+      wishList: JSON.parse(localStorage.getItem("wishlist")) || [],
     };
   }
 
-   async componentDidMount() {
+  async componentDidMount() {
     try {
-      const response = await axios.get(
-        "https://www.themealdb.com/api/json/v1/1/search.php?s="
-      );
+      const [mealsResponse, categoriesResponse, wishList] = await Promise.all([
+        axios.get("https://www.themealdb.com/api/json/v1/1/search.php?s="),
+        axios.get("https://www.themealdb.com/api/json/v1/1/categories.php"),
+      ]);
 
-      const data = response.data;
-
+      // const wishlists = JSON.parse(localStorage.getItem("wishlist")) || [];
       this.setState(
-        { meals: data.meals || [], loading: false },
+        {
+          meals: mealsResponse.data.meals || [],
+          categories: categoriesResponse.data.categories || [],
+          // wishList , wishlists,
+          loading: false,
+          
+        },
         this.applyFilters
       );
     } catch (error) {
@@ -35,158 +67,322 @@ class Home extends Component {
     }
   }
 
-applyFilters = () => {
-  const { meals, selectedCountry, selectedType, searchTerm } = this.state;
+  componentDidUpdate(prevProps) {
+    if (prevProps.queryParam !== this.props.queryParam) {
+      this.setState({ searchTerm: this.props.queryParam }, this.applyFilters);
+    }
+  }
 
-  const filtered = meals.filter((meal) => {
-    const matchesCountry = selectedCountry
-      ? meal.strArea === selectedCountry
-      : true;
+  applyFilters = () => {
+    const {
+      meals,
+      selectedCountry,
+      selectedType,
+      searchTerm,
+      selectedCategory,
+      page,
+    } = this.state;
 
-    const isVeg = meal.strCategory?.includes("Vegetarian");
-    const matchesType =
-      selectedType === "Vegetarian"
-        ? isVeg
-        : selectedType === "Non-Vegetarian"
-        ? !isVeg
+    const filtered = meals.filter((meal) => {
+      const matchesCountry = selectedCountry
+        ? meal.strArea === selectedCountry
         : true;
 
-    const matchesSearch = searchTerm
-      ? meal.strMeal.toLowerCase().includes(searchTerm)
-      : true;
+      const isVeg = meal.strCategory?.includes("Vegetarian");
+      const matchesType =
+        selectedType === "Vegetarian"
+          ? isVeg
+          : selectedType === "Non-Vegetarian"
+          ? !isVeg
+          : true;
 
-    return matchesCountry && matchesType && matchesSearch;
-  });
+      const matchesSearch = searchTerm
+        ? meal.strMeal.toLowerCase().includes(searchTerm.toLowerCase())
+        : true;
 
-  this.setState({ filteredMeals: filtered });
-};
+      const matchesCategory = selectedCategory
+        ? meal.strCategory === selectedCategory
+        : true;
 
-handleSearch = (e) => {
-  const value = e.target.value.toLowerCase();
-  this.setState({ searchTerm: value }, this.applyFilters);
-};
+      return matchesCountry && matchesType && matchesSearch && matchesCategory;
+    });
+
+    this.setState({ filteredMeals: filtered, page: 1 });
+    // here page is set to 1 to make it available for the filters
+  };
+
+  handleSearch = () => {
+    const { searchTerm } = this.state;
+    this.props.navigate(`/?query=${searchTerm}`);
+    this.applyFilters();
+  };
 
   handleNavigation = (meal) => {
-    console.log("Navigate to meal:", meal);
     this.props.navigate(`/meals/${meal.idMeal}`, { state: { meal } });
+  };
+
+  handleSelect = (category) => {
+    this.setState({ selectedCategory: category }, this.applyFilters);
+  };
+
+  handlePageChange = (eve, val) => {
+    this.setState({ page: val });
+  };
+
+  // for the wishlist
+  handleWishlistToggle = (mealId) => {
+    const email = localStorage.getItem("email");
+    if (!email) return;
+
+    let wishlist = [...this.state.wishList];
+
+    if (wishlist.includes(mealId)) {
+      // wishlist = wishlist.filter((id) => id !== mealId);
+      this.setState({
+        showSnackbar: true,
+        snackbarMessage: "Item already in wishlist!",
+      });
+      // return;
+    } else {
+      // Add to wishlist
+      wishlist.push(mealId);
+
+      this.setState({
+        showSnackbar: true,
+        snackbarMessage: "Item added to wishlist!",
+      });
+    }
+
+    localStorage.setItem(`wishlist`, JSON.stringify(wishlist));
+
+    // Auto close after 1 second
+    setTimeout(() => {
+      this.setState({ showSnackbar: false });
+    }, 500);
   };
 
   render() {
     const {
-      meals,
       loading,
       error,
       selectedCountry,
       selectedType,
       filteredMeals,
+      searchTerm,
+      selectedCategory,
+      categories,
+      page,
+      itemsPerPage,
     } = this.state;
 
-    if (loading) return <h1>Loading...</h1>;
+    if (loading) return <Shimmer />;
     if (error) return <p className="meals-error">Error: {error}</p>;
 
-    // const displayMeals = filteredMeals.length > 0 ? filteredMeals : meals;
     const displayMeals = filteredMeals;
 
-    if (displayMeals.length === 0) {
-      return (
-        <div className="No-data-Found-img">
-          <img
-            src="https://cdn.dribbble.com/userupload/2905353/file/original-2022966da1fc3718d3feddfdc471ae47.png?format=webp&resize=400x300&vertical=center"
-            alt="No data"
-          />
-          <h2>No meals found</h2>
-          <button
-            onClick={() =>
-              this.setState(
-                { selectedCountry: "", selectedType: "" },
-                this.applyFilters
-              )
-            }
-            className="reset-filters-btn"
-          >
-            Reset Filters
-          </button>
-        </div>
-      );
-    }
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    const paginatedMeals = filteredMeals.slice(startIndex, endIndex);
+
+    const totalPages = Math.ceil(filteredMeals.length / itemsPerPage);
 
     return (
       <div className="meals-container">
-        <h1 className="meals-heading">Meal List</h1>
+        <div className="top-bar">
+          <TextField
+            fullWidth
+            placeholder="Search meals..."
+            value={searchTerm}
+            onChange={(e) => this.setState({ searchTerm: e.target.value })}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") this.handleSearch();
+            }}
+            sx={{
+              maxWidth: "600px",
+              width: "100%",
+              backgroundColor: "#fff",
+              "& .MuiInputBase-root": {
+                height: "36px",
+                fontSize: "0.85rem",
+              },
+            }}
+          />
+        </div>
 
-       <div className="search-box">
-  <input
-    type="text"
-    placeholder="Search meals..."
-    value={this.state.searchTerm}
-    onChange={(e) => this.setState({ searchTerm: e.target.value })}
-    className="search-input"
-  />
-  <button onClick={this.applyFilters} className="search-btn">
-    Search
-  </button>
-</div>
+        <div className="flag-chip-scroll-container">
+          <Stack direction="row" spacing={1} flexWrap="scroll" sx={{ mb: 2 }}>
+            <Chip
+              label="All"
+              onClick={() => this.handleSelect("")}
+              color={selectedCategory === "" ? "primary" : "default"}
+              variant={selectedCategory === "" ? "filled" : "outlined"}
+            />
+            {[...categories].map((food) => {
+              const isSelected = selectedCategory === food.strCategory;
+              return (
+                <Chip
+                  key={food.idCategory}
+                  label={food.strCategory}
+                  onClick={() => this.handleSelect(food.strCategory)}
+                  onDelete={
+                    isSelected ? () => this.handleSelect("") : undefined
+                  }
+                  color={isSelected ? "primary" : "default"}
+                  variant={isSelected ? "filled" : "outlined"}
+                />
+              );
+            })}
+          </Stack>
 
-
-        <div className="filter-box">
-          <h3>Filter Meals</h3>
-
-          <label>Country:</label>
-
-          <select
-            value={selectedCountry}
-            onChange={(e) => this.setState({ selectedCountry: e.target.value })}
-          >
-            <option value="">All</option>
-            {countries.map((country) => (
-              <option key={country} value={country}>
-                {country}
-              </option>
-            ))}
-          </select>
-
-          <label>Type:</label>
-          <select
-            value={selectedType}
-            onChange={(e) => this.setState({ selectedType: e.target.value })}
-          >
-            <option value="">All</option>
-            <option value="Vegetarian">Vegetarian</option>
-            <option value="Non-Vegetarian">Non-Vegetarian</option>
-          </select>
-
-          <button onClick={this.applyFilters} className="filter-done-btn">
-            Done
-          </button>
+          <div className="flag-chip-row">
+            <Chip
+              label="All"
+              onClick={() =>
+                this.setState({ selectedCountry: "" }, this.applyFilters)
+              }
+              color={this.state.selectedCountry === "" ? "primary" : "default"}
+              variant={
+                this.state.selectedCountry === "" ? "filled" : "outlined"
+              }
+            />
+            {this.state.countries.map((countryObj) => {
+              const isSelected =
+                this.state.selectedCountry === countryObj.demonym;
+              return (
+                <Chip
+                  key={countryObj.country}
+                  avatar={
+                    <Avatar
+                      src={countryObj.flag_svg_url}
+                      alt={countryObj.country}
+                      sx={{ width: 24, height: 24 }}
+                    />
+                  }
+                  label={countryObj.country}
+                  onClick={() =>
+                    this.setState(
+                      { selectedCountry: countryObj.demonym },
+                      this.applyFilters
+                    )
+                  }
+                  onDelete={
+                    isSelected
+                      ? () =>
+                          this.setState(
+                            { selectedCountry: "" },
+                            this.applyFilters
+                          )
+                      : undefined
+                  }
+                  color={isSelected ? "primary" : "default"}
+                  variant={isSelected ? "filled" : "outlined"}
+                />
+              );
+            })}
+          </div>
         </div>
 
         <div className="meals-grid">
-          {displayMeals.map((meal) => (
-            <div
-              key={meal.idMeal}
-              className="meals-card"
-              // onClick={() => this.handleNavigation(meal)}
-              style={{ cursor: "pointer" }}
-            >
-              <img
-                src={meal.strMealThumb}
-                alt={meal.strMeal}
-                className="meals-image"
-                onClick={() => this.handleNavigation(meal)}
-              />
-              <div className="meals-card-content">
-                <h3 className="meals-title">{meal.strMeal}</h3>
+  {paginatedMeals.length > 0 ? (
+    paginatedMeals.map((meal) => (
+      <div
+        key={meal.idMeal}
+        className="meals-card"
+        style={{ cursor: "pointer" }}
+      >
+        <img
+          src={meal.strMealThumb}
+          alt={meal.strMeal}
+          className="meals-image"
+          onClick={() => this.handleNavigation(meal)}
+        />
 
-                <Link to={`/category/${meal.strCategory}`} >
-                <p className="meals-category">{meal.strCategory}</p>
-                </Link>
-                
-                <Link to = {`/category/${meal.strArea}`} >
-                  <p className="meals-area">{meal.strArea}</p>
-                </Link>
-              </div>
+        <div className="meals-card-content">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <h3 className="meals-title">{meal.strMeal}</h3>
+
+            <div className="wishlist-icon-wrapper">
+              <FavoriteIcon
+                className="wishlist-icon"
+                onClick={() => this.handleWishlistToggle(meal.idMeal)}
+                sx={{
+                  color: this.state.wishList.includes(meal.idMeal)
+                    ? "#e91e63"
+                    : "#888",
+                }}
+              />
             </div>
-          ))}
+          </div>
+          <Link to={`/category/${meal.strCategory}`}>
+            <p className="meals-category">{meal.strCategory}</p>
+          </Link>
+          <Link to={`/category/${meal.strArea}`}>
+            <p className="meals-area">{meal.strArea}</p>
+          </Link>
+        </div>
+      </div>
+    ))
+  ) : (
+    <div className="No-data-Found-img">
+      <img
+        src="https://cdn.dribbble.com/userupload/2905353/file/original-2022966da1fc3718d3feddfdc471ae47.png?format=webp&resize=400x300&vertical=center"
+        alt="No data"
+      />
+      <h2>No meals found</h2>
+      <button
+        onClick={() =>
+          this.setState(
+            {
+              selectedCountry: "",
+              selectedType: "",
+              searchTerm: "",
+              selectedCategory: "",
+            },
+            this.applyFilters
+          )
+        }
+        className="reset-filters-btn"
+      >
+        Reset Filters
+      </button>
+    </div>
+  )}
+</div>
+
+        <div
+          style={{ display: "flex", justifyContent: "center", marginTop: 24 }}
+        >
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={this.handlePageChange}
+            color="primary"
+            shape="rounded"
+            showFirstButton
+            showLastButton
+          />
+
+          <Snackbar
+            open={this.state.showSnackbar}
+            message={this.state.snackbarMessage}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            action={
+              <IconButton
+                size="small"
+                color="inherit"
+                onClick={() => this.setState({ showSnackbar: false })}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            }
+          />
         </div>
       </div>
     );
@@ -194,9 +390,16 @@ handleSearch = (e) => {
 }
 
 function HomeFunction(props) {
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  return <Home {...props} navigate={navigation} />;
+  return (
+    <Home
+      {...props}
+      navigate={navigate}
+      queryParam={searchParams.get("query") || ""}
+    />
+  );
 }
 
 export default HomeFunction;

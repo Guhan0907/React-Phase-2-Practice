@@ -1,0 +1,47 @@
+.delete-icon-wrapper {
+  position: absolute;
+  bottom: 12px;
+  right : 12px;
+  background-color: white;
+  border-radius: 50%;
+  padding: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.meals-card {
+  position: relative;
+}
+
+
+.back-button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.back-button-container-up {
+  position: absolute;
+  top: 90px; 
+  left: 20px;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .back-button-container {
+    justify-content: center;
+  }
+
+  .back-button-container-up {
+    top: 80px;
+    left: 10px;
+    margin-bottom: 5px;
+    font-size: 1.2;
+  }
+
+  .meals-heading {
+    font-size: 1.8rem;
+  }
+}

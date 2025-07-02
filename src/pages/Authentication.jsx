@@ -1,100 +1,110 @@
-// import React, { Component } from "react";
-// import Login from "../components/Login";
-// import SignUp from "../components/SignUp";
-// import Home from "./Home";
+import React, { Component } from "react";
+import Login from "../components/Login";
+import SignUp from "../components/SignUp";
+import HomeFunction from "./Home/Home";
+import { useNavigate } from "react-router-dom";
 
 
-// class Authentication extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       isLogin: true,
-//       isUserLogged: (localStorage.getItem("email") ? true : false),
-//       users: [
-//         {
-//           userName: "Gojo",
-//           email: "hello@gmail.com", // fixed typo from gmial to gmail
-//           password: "123456",
-//         },
-//       ],
-//     };
+class Authentication extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLogin: false,
+      isUserLogged: (localStorage.getItem("email") ? true : false),
+      users: [
+        {
+          userName: "Gojo",
+          email: "hello@gmail.com", 
+          password: "123456",
+        },
+      ],
+    };
 
 
-//   }
+  }
 
-//   handleLogin = (obj) => {
-//     const user = this.state.users;
-//     const userExists = user.find(
-//       (x) => x.email === obj.email && x.password === obj.password,
-//     );
+  handleLogin = (obj) => {
+    const user = this.state.users;
+    const userExists = user.find(
+      (x) => x.email === obj.email && x.password === obj.password,
+    );
 
-//     if (userExists) {
-//       localStorage.setItem("email" ,obj.email);
-//       this.setState({ isLogin: true, isUserLogged: true });
-//     } 
-//     else if (obj.email === "") {
-//       alert("Enter the Details");
-//     } else {
-//       console.log(obj);
-//       alert("Invalid Credentials");
-//     }
-//   };
+    if (userExists) {
+      localStorage.setItem("email" ,obj.email);
+      this.setState({ isLogin: true, isUserLogged: true });
+    } 
+    else if (obj.email === "") {
+      alert("Enter the Details");
+    } else {
+      console.log(obj);
+      alert("Invalid Credentials");
+    }
+  };
 
-//   handleLogout = () => {
-//     localStorage.removeItem("email");
-//     // <Naviag
-//     console.log("-- varutha --")
-//   }
+  handleLogout = () => {
+    localStorage.removeItem("email");
+    // <Naviag
+    console.log("-- varutha --")
+  }
 
-//   handleSignUp = (obj) => {
-//     const { users } = this.state;
+  handleSignUp = (obj) => {
+    const { users } = this.state;
 
-//     const userExists = users.find((x) => x.email === obj.email);
+    const userExists = users.find((x) => x.email === obj.email);
 
-//     if (userExists) alert("User Already Present");
-//     else if (obj.email === "") {
-//       alert("Enter the Details");
-//     } else {
-//       let data = {
-//         userName: obj.userName,
-//         email: obj.email,
-//         password: obj.password,
-//       };
-//       // users = [...users , data];
-//       this.setState({
-//         users: [...users, data],
-//         isLogin: true,
-//         // isUserLogged: true,
-//       });
-//       // this.setState({})
-//     }
-//   };
+    if (userExists) alert("User Already Present");
+    else if (obj.email === "") {
+      alert("Enter the Details");
+    } else {
+      let data = {
+        userName: obj.userName,
+        email: obj.email,
+        password: obj.password,
+      };
+      // localStorage.setItem("email",data.email);
+      this.setState({
+        users: [...users, data],
+        isLogin: true,
+        isUserLogged: true,
+      });
+      localStorage.setItem("email",data.email);
+      // this.setState({})
+    }
+  };
 
-//   handleToggle = () => {
-//     var temp = !this.state.isLogin;
-//     this.setState({ isLogin: temp });
-//   };
+  handleToggle = () => {
+    var temp = !this.state.isLogin;
+    this.setState({ isLogin: temp });
+  };
 
-//   render() {
+  render() {
     
-//     return (
-//       <>
-//         {/* <h1> Hello this is the Authentication Page </h1> */}
-//         <div>
-//           {this.state.isUserLogged ? (
-//             <HomeCompWithHooks  logout = {this.handleLogout}/>
-//           ) : this.state.isLogin ? (
-//             <Login onLogin={this.handleLogin} goToSignUp={this.handleToggle} />
-//           ) : (
-//             <SignUp
-//               onSignUp={this.handleSignUp}
-//               goToLogin={this.handleToggle}
-//             />
-//           )}
-//         </div>
-//       </>
-//     );
-//   }
+    return (
+      <>
+        {/* <h1> Hello this is the Authentication Page </h1> */}
+        <div>
+          {this.state.isUserLogged ? (
+            <HomeFunction  logout = {this.handleLogout}/>
+          ) : this.state.isLogin ? (
+            <Login onLogin={this.handleLogin} goToSignUp={this.handleToggle} />
+          ) : (
+            <SignUp
+              onSignUp={this.handleSignUp}
+              goToLogin={this.handleToggle}
+            />
+          )}
+        </div>
+      </>
+    );
+  }
+}
+
+export default Authentication;
+
+// function AuthenticationFunction(props){
+//     const navigate = useNavigate();
+
+//     return <Authentication {...props} navigate = {navigate} />
 // }
 
-// export default Authentication;
+// export default AuthenticationFunction;

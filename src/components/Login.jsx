@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import "./components.css";
+import "./component.css";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 // button
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
 const LoginFields = [
   {
     name: "email",
@@ -74,7 +71,6 @@ class Login extends Component {
         helperText.password = "";
         touched.password = false;
       }
-      // touchedState.password = true;
     }
 
     this.setState({ errors, helperText, touched: touchedState });
@@ -141,26 +137,6 @@ class Login extends Component {
                 Sign Up
               </button>
             </Box>
-            {/* <FormGroup>
-              <FormControlLabel
-                control={
-                  <Switch
-                    defaultChecked
-                  />
-                }
-                label="Label"
-              />
-              <FormControlLabel
-                required
-                control={<Switch />}
-                label="Required"
-              />
-              <FormControlLabel
-                disabled
-                control={<Switch />}
-                label="Disabled"
-              />
-            </FormGroup> */}
           </Box>
         </div>
       </div>
@@ -170,10 +146,4 @@ class Login extends Component {
 
 export default Login;
 
-// import * as React from 'react';
 
-// export default function SwitchLabels() {
-//   return (
-
-//   );
-// }

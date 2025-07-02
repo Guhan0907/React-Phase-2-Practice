@@ -1,0 +1,123 @@
+/* Login.css */
+
+.login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #eef1f5;
+  padding: 16px;
+}
+
+.login-card {
+  background-color: white;
+  padding: 32px;
+  border-radius: 12px;
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */
+  border: solid #155a9a;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.login-button {
+  margin-top: 20px;
+  /* width: 100%; */
+  max-width: 70%;
+  padding: 10px 16px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #0a5ca8;
+}
+
+
+
+/* product css from the pages folder */
+
+.products-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.products-heading {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.products-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.products-image {
+  max-height: 180px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
+
+.products-title {
+  font-size: 18px;
+  margin: 0 0 10px 0;
+  color: #111;
+}
+
+.products-category {
+  font-size: 14px;
+  font-style: italic;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.products-description {
+  flex-grow: 1;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.products-price {
+  font-weight: bold;
+  font-size: 16px;
+  color: #2e7d32;
+}
+
+.products-loading {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin-top: 40px;
+}
+
+.products-error {
+  color: red;
+  text-align: center;
+  font-size: 18px;
+  margin-top: 40px;
+}

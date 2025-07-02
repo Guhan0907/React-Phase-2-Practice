@@ -1,192 +1,11 @@
-// import React, { Component } from "react";
-// // import "./Home.css";
-// // import { countries } from "../../constants/homeConstants";
-// import { useLocation, useNavigate, useParams } from "react-router-dom";
-// import axios from "axios";
-
-// class FilteredItemsByCategory extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       meals: [],
-//       loading: true,
-//       error: null,
-//       selectedCountry: "",
-//       selectedType: "",
-//       filteredMeals: [],
-//     };
-//   }
-
-// //   async componentDidMount() {
-// //     try {
-// //       const response = await axios.get(
-// //         "https://www.themealdb.com/api/json/v1/1/search.php?s="
-// //       );
-
-// //       const data = response.data;
-
-// //       this.setState(
-// //         { meals: data.meals || [], loading: false },
-// //         this.applyFilters
-// //       );
-// //     } catch (error) {
-// //       this.setState({ error: error.message, loading: false });
-// //     }
-// //   }
-
-
-// //   async componentDidMount() {
-// //     const {locate , params , navigate} = this.state;
-
-// //     if (locate?.state?.meal)
-// //   }
-
-// //   applyFilters = () => {
-// //     const { meals, selectedCountry, selectedType } = this.state;
-
-// //     const filtered = meals.filter((meal) => {
-// //       const matchesCountry = selectedCountry
-// //         ? meal.strArea === selectedCountry
-// //         : true;
-
-// //       const isVeg = meal.strCategory?.includes("Vegetarian");
-// //       const matchesType =
-// //         selectedType === "Vegetarian"
-// //           ? isVeg
-// //           : selectedType === "Non-Vegetarian"
-// //           ? !isVeg
-// //           : true;
-
-// //       return matchesCountry && matchesType;
-// //     });
-
-// //     this.setState({ filteredMeals: filtered });
-// //   };
-
-//   handleNavigation = (meal) => {
-//     console.log("Navigate to meal:", meal);
-//     this.props.navigate(`/meals/${meal.idMeal}`, { state: { meal } });
-//   };
-
-//   render() {
-//     const {
-//       meals,
-//       loading,
-//       error,
-//       selectedCountry,
-//       selectedType,
-//       filteredMeals,
-//     } = this.state;
-
-//     if (loading) return <h1>Loading...</h1>;
-//     if (error) return <p className="meals-error">Error: {error}</p>;
-
-//     // const displayMeals = filteredMeals.length > 0 ? filteredMeals : meals;
-//     const displayMeals = filteredMeals;
-
-//     if (displayMeals.length === 0) {
-//       // console.log("Onnum illa da")
-//       return (
-//         <div className="No-data-Found-img">
-//           <img
-//             src="https://cdn.dribbble.com/userupload/2905353/file/original-2022966da1fc3718d3feddfdc471ae47.png?format=webp&resize=400x300&vertical=center"
-//             alt="No data"
-//           />
-//           <h2>No meals found</h2>
-//           <button
-//             onClick={() =>
-//               this.setState(
-//                 { selectedCountry: "", selectedType: "" },
-//                 this.applyFilters
-//               )
-//             }
-//             className="reset-filters-btn"
-//           >
-//             Reset Filters
-//           </button>
-//         </div>
-//       );
-//     }
-
-//     return (
-//       <div className="meals-container">
-//         <h1 className="meals-heading">Filtered Meal List</h1>
-
-//         {/* <div className="filter-box">
-//           <h3>Filter Meals</h3>
-
-//           <label>Country:</label>
-
-//           <select
-//             value={selectedCountry}
-//             onChange={(e) => this.setState({ selectedCountry: e.target.value })}
-//           >
-//             <option value="">All</option>
-//             {countries.map((country) => (
-//               <option key={country} value={country}>
-//                 {country}
-//               </option>
-//             ))}
-//           </select>
-
-//           <label>Type:</label>
-//           <select
-//             value={selectedType}
-//             onChange={(e) => this.setState({ selectedType: e.target.value })}
-//           >
-//             <option value="">All</option>
-//             <option value="Vegetarian">Vegetarian</option>
-//             <option value="Non-Vegetarian">Non-Vegetarian</option>
-//           </select>
-
-//           <button onClick={this.applyFilters} className="filter-done-btn">
-//             Done
-//           </button>
-//         </div> */}
-
-//         <div className="meals-grid">
-//           {displayMeals.map((meal) => (
-//             <div
-//               key={meal.idMeal}
-//               className="meals-card"
-//               onClick={() => this.handleNavigation(meal)}
-//               style={{ cursor: "pointer" }}
-//             >
-//               <img
-//                 src={meal.strMealThumb}
-//                 alt={meal.strMeal}
-//                 className="meals-image"
-//               />
-//               <div className="meals-card-content">
-//                 <h3 className="meals-title">{meal.strMeal}</h3>
-//                 <p className="meals-category">{meal.strCategory}</p>
-//                 <p className="meals-area">{meal.strArea}</p>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
-// function FilteredItemsByCategoryFunction(props) {
-//   const navigation = useNavigate();
-//   const params = useParams();
-//   const location = useLocation();
-
-//   return <Home {...props} navigate={navigation} params = {params} locate = {location} />;
-// }
-
-// export default FilteredItemsByCategoryFunction;
-
-
-
 import React, { Component } from "react";
-import "../Home/Home.css"; // reuse Home styles  
+import "../Home/Home.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { countries } from "../../constants/homeConstants";
+import { Button , Pagination} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Shimmer from "../Shimmer/Shimmer";
 
 class FilteredItemsByCategory extends Component {
   constructor(props) {
@@ -195,6 +14,8 @@ class FilteredItemsByCategory extends Component {
       meals: [],
       loading: true,
       error: null,
+      page: 1,
+      itemsPerPage: 6,
     };
   }
 
@@ -208,21 +29,27 @@ class FilteredItemsByCategory extends Component {
       : `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`;
 
     try {
-    // if (categoryName.)
-      const response = await axios.get(
-        // `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`
-        url
-      );
+      const response = await axios.get(url);
       const data = response.data;
-    //   console.log("-----------" , data, "=======")
-    console.log("name => ",this.props.params.str)
 
       if (data.meals) {
-        this.setState({ meals: data.meals, loading: false });
-        console.log("Data iruku da")
+        const fullMeals = await Promise.all(
+          data.meals.map(async (meal) => {
+            const res = await axios.get(
+              `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
+            );
+            return res.data.meals?.[0]; // to avoid the data to get wrapped in array
+          })
+        );
+
+        // console.log("full ->", fullMeals.filter(Boolean));
+        this.setState({ meals: fullMeals.filter(Boolean), loading: false });
+        // console.log("Entered the filter => ", data.meals);
       } else {
-        this.setState({ error: "No meals found in this category", loading: false });
-        console.log("Data illa da--------")
+        this.setState({
+          error: "No meals found in this category",
+          loading: false,
+        });
       }
     } catch (error) {
       this.setState({ error: error.message, loading: false });
@@ -230,13 +57,22 @@ class FilteredItemsByCategory extends Component {
   }
 
   handleNavigation = (meal) => {
+    console.log("Navigated value => ", meal);
     this.props.navigate(`/meals/${meal.idMeal}`, { state: { meal } });
   };
 
-  render() {
-    const { meals, loading, error } = this.state;
+  handleBack = () => {
+    this.props.navigate(-1); // Go back
+  };
 
-    if (loading) return <h1>Loading...</h1>;
+  handlePageChange = (eve, val) => {
+    this.setState({ page: val });
+  };
+
+  render() {
+    const { meals, loading, error, page, itemsPerPage } = this.state;
+
+    if (loading) return <Shimmer />;
     if (error) {
       return (
         <div className="no-details">
@@ -245,12 +81,38 @@ class FilteredItemsByCategory extends Component {
       );
     }
 
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    const paginatedMeals = meals.slice(startIndex, endIndex);
+
+    const totalPages = Math.ceil(meals.length / itemsPerPage);
+
     return (
       <div className="meals-container">
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={this.handleBack}
+          sx={{
+            position: "fixed",
+            top: 60,
+            left: 16,
+            zIndex: 1000,
+            backgroundColor: "white",
+            boxShadow: 2,
+            "&:hover": {
+              backgroundColor: "#f0f0f0",
+            },
+          }}
+        >
+          Back
+        </Button>
+
         <h1 className="meals-heading">Meals in {this.props.params.str}</h1>
 
         <div className="meals-grid">
-          {meals.map((meal) => (
+          {paginatedMeals.map((meal) => (
             <div
               key={meal.idMeal}
               className="meals-card"
@@ -268,12 +130,24 @@ class FilteredItemsByCategory extends Component {
             </div>
           ))}
         </div>
+        <div
+          style={{ display: "flex", justifyContent: "center", marginTop: 24 }}
+        >
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={this.handlePageChange}
+            color="primary"
+            shape="rounded"
+            showFirstButton
+            showLastButton
+          />
+        </div>
       </div>
     );
   }
 }
 
-// Wrapper to pass hooks into class component
 function FilteredItemsByCategoryFunction(props) {
   const navigation = useNavigate();
   const params = useParams();
