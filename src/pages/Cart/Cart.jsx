@@ -96,17 +96,6 @@ class Cart extends Component {
 
     return (
       <div className="meals-container">
-
-        <div className="back-button-container-up">
-          <Button
-            variant="outlined"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => this.props.navigate(-1)}
-          >
-            Back
-          </Button>
-        </div>
-
         <h1 className="meals-heading">Your Wishlist</h1>
         <div className="meals-grid">
           {wishlistMeals.map((meal) => (
@@ -143,8 +132,6 @@ class Cart extends Component {
     );
   }
 }
-
-// export default Cart;
 
 function CartFunction(props) {
   const navigate = useNavigate();

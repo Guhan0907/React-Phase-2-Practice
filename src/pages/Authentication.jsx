@@ -2,50 +2,43 @@ import React, { Component } from "react";
 import Login from "../components/Login";
 import SignUp from "../components/SignUp";
 import HomeFunction from "./Home/Home";
-import { useNavigate } from "react-router-dom";
-
+import { useLocation, useNavigate, useNavigation } from "react-router-dom";
 
 class Authentication extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLogin: false,
-      isUserLogged: (localStorage.getItem("email") ? true : false),
+      isUserLogged: localStorage.getItem("email") ? true : false,
       users: [
         {
           userName: "Gojo",
-          email: "hello@gmail.com", 
+          email: "hello@gmail.com",
           password: "123456",
         },
       ],
     };
-
-
   }
 
   handleLogin = (obj) => {
     const user = this.state.users;
     const userExists = user.find(
-      (x) => x.email === obj.email && x.password === obj.password,
+      (x) => x.email === obj.email && x.password === obj.password
     );
 
     if (userExists) {
-      localStorage.setItem("email" ,obj.email);
-      this.setState({ isLogin: true, isUserLogged: true });
-    } 
-    else if (obj.email === "") {
+      localStorage.setItem("email", obj.email);
+
+      this.setState({ isLogin: true, isUserLogged: true }, () => {
+        this.props.navigate("/"); // redirect to home
+        console.log(".............................");
+      });
+    } else if (obj.email === "") {
       alert("Enter the Details");
     } else {
-      console.log(obj);
       alert("Invalid Credentials");
     }
   };
-
-  handleLogout = () => {
-    localStorage.removeItem("email");
-    // <Naviag
-    console.log("-- varutha --")
-  }
 
   handleSignUp = (obj) => {
     const { users } = this.state;
@@ -61,14 +54,13 @@ class Authentication extends Component {
         email: obj.email,
         password: obj.password,
       };
-      // localStorage.setItem("email",data.email);
       this.setState({
         users: [...users, data],
         isLogin: true,
         isUserLogged: true,
       });
-      localStorage.setItem("email",data.email);
-      // this.setState({})
+      localStorage.setItem("email", data.email);
+      this.props.navigate("/");
     }
   };
 
@@ -78,13 +70,17 @@ class Authentication extends Component {
   };
 
   render() {
-    
+    // if (this.state.isUserLogged && this.props.location.pathname === "/login") {
+    //   this.props.navigate("/");
+    //   console.log("Pathname  =>> ",this.props.location.pathname)
+    //   return null; // Prevent rendering anything else during redirect
+    // }
+
     return (
       <>
-        {/* <h1> Hello this is the Authentication Page </h1> */}
         <div>
           {this.state.isUserLogged ? (
-            <HomeFunction  logout = {this.handleLogout}/>
+            <HomeFunction logout={this.handleLogout} />
           ) : this.state.isLogin ? (
             <Login onLogin={this.handleLogin} goToSignUp={this.handleToggle} />
           ) : (
@@ -99,12 +95,10 @@ class Authentication extends Component {
   }
 }
 
-export default Authentication;
+function AuthenticationFunction(props) {
+  const navigate = useNavigate();
+  const location = useLocation()
+  return <Authentication {...props} navigate={navigate} location={location}/>;
+}
 
-// function AuthenticationFunction(props){
-//     const navigate = useNavigate();
-
-//     return <Authentication {...props} navigate = {navigate} />
-// }
-
-// export default AuthenticationFunction;
+export default AuthenticationFunction;

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import "./component.css"
+import { useNavigate } from "react-router-dom";
 
 const SignUpFields = [
   {
@@ -201,4 +202,12 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+// export default SignUp;
+
+function SignUpFunction(props) {
+  const navigate = useNavigate();
+
+  return <SignUp {...props} navigate = {navigate} />
+}
+
+export default SignUpFunction;

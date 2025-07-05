@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { itemDetailsApi } from "../../services/apiCalls";
 
 class ItemDetails extends Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class ItemDetails extends Component {
       meal: null,
       loading: true,
       error: null,
+      showFullInstructions: false,
     };
   }
 
@@ -27,10 +29,11 @@ class ItemDetails extends Component {
       // Fetch by ID from URL
       const mealId = params.id;
       try {
-        const response = await axios.get(
-          `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`
-        );
-        const fetchedMeal = response.data.meals?.[0];
+        // const response = await axios.get(
+        //   `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`
+        // );
+        // const fetchedMeal = response.data.meals?.[0];
+        const fetchedMeal = (await itemDetailsApi(mealId)).data.meals?.[0];
 
         if (fetchedMeal) {
           this.setState({ meal: fetchedMeal, loading: false });
@@ -68,12 +71,26 @@ class ItemDetails extends Component {
   getInstructionSteps(instructions) {
     if (!instructions) return [];
 
+    // const rawSteps = instructions.split(/\r?\n|\. (?=[A-Z])|(?:\d+\.?\s)/);
+
+    // const trimmedSteps = rawSteps.map((step) => step.trim());
+
+    // const cleanSteps = trimmedSteps.filter((step) => step.length > 0);
+
+    // return cleanSteps;
+
     // Split by periods, newlines, or numbered steps
     return instructions
       .split(/\r?\n|\. (?=[A-Z])|(?:\d+\.?\s)/)
       .map((step) => step.trim())
       .filter((step) => step.length > 0);
   }
+
+  toggleInstructions = () => {
+    this.setState((prevState) => ({
+      showFullInstructions: !prevState.showFullInstructions,
+    }));
+  };
 
   render() {
     const { meal, loading, error } = this.state;
@@ -108,7 +125,7 @@ class ItemDetails extends Component {
 
     return (
       <div className="meal-details-container">
-        <Button
+        {/* <Button
           variant="outlined"
           startIcon={<ArrowBackIcon />}
           onClick={() => this.props.navigate(-1)}
@@ -125,7 +142,7 @@ class ItemDetails extends Component {
           }}
         >
           Back
-        </Button>
+        </Button> */}
 
         <div className="meal-card">
           <div className="meal-header">
@@ -167,16 +184,45 @@ class ItemDetails extends Component {
                 <div className="details-section">
                   <h3 className="section-title">Instructions</h3>
                   <div className="instructions-content">
-                    {instructionSteps.length > 1 ? (
+                    {/* {instructionSteps.length > 1 ? (
                       instructionSteps.map((step, index) => (
                         <p key={index} className="instruction-step">
-                          {/* {step} */}
                           <strong>Step {index + 1}:</strong> {step}
                         </p>
                       ))
                     ) : (
                       <p className="instruction-step">{meal.strInstructions}</p>
+                    )} */}
+
+                    {instructionSteps.length > 1 ? (
+                      <>
+                        {(this.state.showFullInstructions
+                          ? instructionSteps
+                          : instructionSteps.slice(0, 3)
+                        ).map((step, index) => (
+                          <p key={index} className="instruction-step">
+                            <strong>Step {index + 1}:</strong> {step}
+                          </p>
+                        ))}
+
+                        {instructionSteps.length > 3 && (
+                          <Button
+                            variant="text"
+                            size="small"
+                            onClick={this.toggleInstructions}
+                            sx={{ mt: 1, textTransform: "none" }}
+                          >
+                            {this.state.showFullInstructions
+                              ? "Show Less"
+                              : "Show More"}
+                          </Button>
+                        )}
+                      </>
+                    ) : (
+                      <p className="instruction-step">{meal.strInstructions}</p>
                     )}
+
+                    {/* above is the added code */}
                   </div>
                 </div>
               )}

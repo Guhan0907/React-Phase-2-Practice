@@ -13,15 +13,14 @@ body {
 
 /* back button */
 
-.top-left-back {
+/* .top-left-back {
   position: fixed;
-  /* top: 1rem; */
   top: 5rem;
   left: 1rem;
   z-index: 999;
-}
+} */
 
-.back-button-global {
+/* .back-button-global {
   background: #4f46e5;
   color: white;
   border: none;
@@ -32,11 +31,11 @@ body {
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   transition: background 0.2s ease;
-}
+} */
 
-.back-button-global:hover {
+/* .back-button-global:hover {
   background: #4338ca;
-}
+} */
 
 /* Container */
 .meal-details-container {
@@ -62,18 +61,18 @@ body {
 }
 
 /* Tags */
-.meal-tags {
+/* .meal-tags {
   margin-bottom: 1rem;
-}
+} */
 
-.tag {
+/* .tag {
   display: inline-block;
   margin: 0.25rem 0.5rem;
   padding: 0.4rem 1rem;
   border-radius: 20px;
   background-color: #eee;
   font-size: 0.85rem;
-}
+} */
 
 /* Image */
 .meal-image {
@@ -138,7 +137,7 @@ body {
 }
 
 /* Additional Info */
-.additional-info {
+/* .additional-info {
   text-align: left;
   background: #f3f4f6;
   padding: 1rem;
@@ -152,7 +151,7 @@ body {
 
 .source-link:hover {
   text-decoration: underline;
-}
+} */
 
 /* Loading & Error */
 .loading-container,
