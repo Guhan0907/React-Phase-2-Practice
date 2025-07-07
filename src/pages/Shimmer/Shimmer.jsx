@@ -3,7 +3,6 @@ import "./Shimmer.css";
 
 class Shimmer extends Component {
   render() {
-    // Render 8 shimmer cards
     const shimmerCards = Array.from({ length: 8 }).map((_, i) => (
       <div className="meals-card shimmer-card" key={i}>
         <div className="shimmer shimmer-image" />

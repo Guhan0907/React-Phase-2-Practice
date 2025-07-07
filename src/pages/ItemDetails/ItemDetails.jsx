@@ -23,7 +23,6 @@ class ItemDetails extends Component {
 
     // Meal is passed via location state
     if (locate?.state?.meal) {
-      console.log("This is located => ", locate.state.meal);
       this.setState({ meal: locate.state.meal, loading: false });
     } else {
       // Fetch by ID from URL
@@ -48,7 +47,6 @@ class ItemDetails extends Component {
     }
   }
 
-  // Helper function to extract ingredients from meal data
   getIngredients(meal) {
     const ingredients = [];
     for (let i = 1; i <= 20; i++) {
@@ -56,18 +54,16 @@ class ItemDetails extends Component {
       const measure = meal[`strMeasure${i}`];
       if (ingredient && ingredient.trim()) {
         ingredients.push(
-          `${measure ? measure.trim() : ""} ${ingredient.trim()}`
+          `${measure ? measure.trim() : ""} ${ingredient.trim()}`,
         );
       }
     }
     return ingredients;
   }
 
-  // Helper function to split instructions into steps
   getInstructionSteps(instructions) {
     if (!instructions) return [];
 
-    // Split by periods, newlines, or numbered steps
     return instructions
       .split(/\r?\n|\. (?=[A-Z])|(?:\d+\.?\s)/)
       .map((step) => step.trim())

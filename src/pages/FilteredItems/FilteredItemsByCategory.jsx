@@ -6,7 +6,11 @@ import { countries } from "../../constants/homeConstants";
 import { Button, Pagination } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Shimmer from "../Shimmer/Shimmer";
-import { itemDetailsApi } from "../../services/apiCalls";
+import {
+  itemDetailsApi,
+  filteredItemsA,
+  filteredItemsC,
+} from "../../services/apiCalls";
 
 class FilteredItemsByCategory extends Component {
   constructor(props) {
@@ -26,8 +30,8 @@ class FilteredItemsByCategory extends Component {
     const isCountry = countries.includes(categoryName);
 
     const url = isCountry
-      ? `https://www.themealdb.com/api/json/v1/1/filter.php?a=${categoryName}`
-      : `https://www.themealdb.com/api/json/v1/1/filter.php?c=${categoryName}`;
+      ? filteredItemsA(categoryName)
+      : filteredItemsC(categoryName);
 
     try {
       const response = await axios.get(url);
@@ -36,8 +40,8 @@ class FilteredItemsByCategory extends Component {
       if (data.meals) {
         const fullMeals = await Promise.all(
           data.meals.map(async (meal) =>
-            itemDetailsApi(meal.idMeal).then((res) => res.data.meals?.[0])
-          )
+            itemDetailsApi(meal.idMeal).then((res) => res.data.meals?.[0]),
+          ),
         );
 
         this.setState({ meals: fullMeals.filter(Boolean), loading: false });
@@ -53,12 +57,11 @@ class FilteredItemsByCategory extends Component {
   }
 
   handleNavigation = (meal) => {
-    console.log("Navigated value => ", meal);
     this.props.navigate(`/meals/${meal.idMeal}`, { state: { meal } });
   };
 
   handleBack = () => {
-    this.props.navigate(-1); // Go back
+    this.props.navigate(-1);
   };
 
   handlePageChange = (eve, val) => {

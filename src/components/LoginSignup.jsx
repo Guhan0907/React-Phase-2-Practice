@@ -3,7 +3,12 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./component.css";
-import { LoginFields, SignUpFields } from "../constants/homeConstants";
+import {
+  LoginFields,
+  SignUpFields,
+  emailRegex,
+  strongPasswordRegex,
+} from "../constants/homeConstants";
 
 class SigninPage extends Component {
   constructor(props) {
@@ -54,7 +59,6 @@ class SigninPage extends Component {
         break;
 
       case "email":
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
           errors.email = true;
           helperText.email = "Please enter a valid email";
@@ -67,28 +71,36 @@ class SigninPage extends Component {
         break;
 
       case "password":
-        if (password.length < 6) {
-          errors.password = true;
-          helperText.password = "Password must be at least 6 characters";
-          touched.password = true;
-          isValid = false;
+        if (this.state.isLogin) {
+          if (password.length < 6) {
+            errors.password = true;
+            helperText.password = "Password must be at least 6 characters";
+            touched.password = true;
+            isValid = false;
+          } else {
+            errors.password = false;
+            helperText.password = "";
+          }
         } else {
-          errors.password = false;
-          helperText.password = "";
-        }
+          if (!strongPasswordRegex.test(password)) {
+            errors.password = true;
+            helperText.password =
+              "Must be 6+ chars with letters, numbers & special characters";
+            touched.password = true;
+            isValid = false;
+          } else {
+            errors.password = false;
+            helperText.password = "";
+          }
 
-        if (
-          !this.state.isLogin &&
-          confirmPassword &&
-          confirmPassword !== password
-        ) {
-          errors.confirmPassword = true;
-          helperText.confirmPassword = "Passwords do not match";
-        } else {
-          errors.confirmPassword = false;
-          helperText.confirmPassword = "";
+          if (confirmPassword && confirmPassword !== password) {
+            errors.confirmPassword = true;
+            helperText.confirmPassword = "Passwords do not match";
+          } else {
+            errors.confirmPassword = false;
+            helperText.confirmPassword = "";
+          }
         }
-
         break;
 
       case "confirmPassword":

@@ -1,5 +1,4 @@
 import { createRoot } from "react-dom/client";
-import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ItemDetailsFunction from "./pages/ItemDetails/ItemDetails.jsx";
 import FilteredItemsByCategoryFunction from "./pages/FilteredItems/FilteredItemsByCategory.jsx";
@@ -22,7 +21,7 @@ const themeObj = createTheme({
   },
 });
 
-const rout = createBrowserRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <AppFunction />,
@@ -70,7 +69,7 @@ const rout = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <ErrorBoundary>
     <ThemeProvider theme={themeObj}>
-      <RouterProvider router={rout} />
+      <RouterProvider router={router} />
     </ThemeProvider>
-  </ErrorBoundary>
+  </ErrorBoundary>,
 );

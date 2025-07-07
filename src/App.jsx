@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import HeaderFunction from "./pages/Header/Header";
-import SigninPageWrapper from "./components/Signin-page";
+import SigninPageWrapper from "./components/LoginSignup";
 
 class App extends Component {
   constructor(props) {
@@ -31,7 +31,7 @@ class App extends Component {
 
   validateCredentials = (email, password) => {
     const user = this.state.users.find(
-      (x) => x.email === email && x.password === password
+      (x) => x.email === email && x.password === password,
     );
     return !!user;
   };
@@ -49,6 +49,10 @@ class App extends Component {
     return true;
   };
 
+  handleLogout = () => {
+    this.setState({ isUserLogged: false });
+  };
+
   render() {
     const { isUserLogged } = this.state;
 
@@ -56,7 +60,9 @@ class App extends Component {
       <>
         {isUserLogged ? (
           <>
-            <HeaderFunction />
+            {/* <HeaderFunction /> */}
+            <HeaderFunction onLogout={this.handleLogout} />
+
             <Outlet />
           </>
         ) : (

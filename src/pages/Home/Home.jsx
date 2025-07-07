@@ -6,12 +6,11 @@ import { TextField, Pagination, Snackbar, Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Shimmer from "../Shimmer/Shimmer";
-import Filter from "../../components/UI-Components/Filter";
-import MealCard from "../../components/UI-Components/MealCard";
+import Filter from "../../components/Filter";
+import MealCard from "../../components/MealCard";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Close";
 import InputAdornment from "@mui/material/InputAdornment";
-// API
 import { HomeApi, categoryApi, searchMealApi } from "../../services/apiCalls";
 
 class Home extends Component {
@@ -39,14 +38,13 @@ class Home extends Component {
   async componentDidMount() {
     try {
       const { data: { meals = [] } = {} } = await HomeApi();
-      // const meals = mealsResponse.data.meals || [];
 
       this.setState(
         {
           meals,
           loading: false,
         },
-        this.applyFilters
+        this.applyFilters,
       );
     } catch (error) {
       this.setState({ error: "Failed to fetch meals.", loading: false });
@@ -60,7 +58,6 @@ class Home extends Component {
       })
       .catch((err) => {
         console.warn("Failed to fetch categories: ", err.message);
-        // If it fails, don't set categories at all
         this.setState({ categories: [] });
       });
   }
@@ -91,8 +88,8 @@ class Home extends Component {
         selectedType === "Vegetarian"
           ? isVeg
           : selectedType === "Non-Vegetarian"
-          ? !isVeg
-          : true;
+            ? !isVeg
+            : true;
 
       const matchesSearch = searchTerm
         ? meal.strMeal.toLowerCase().includes(searchTerm.toLowerCase())
@@ -122,7 +119,7 @@ class Home extends Component {
           {
             meals: meals,
           },
-          this.applyFilters
+          this.applyFilters,
         );
       } catch (error) {
         this.setState({ error: "Search failed", meals: [] });
@@ -136,7 +133,7 @@ class Home extends Component {
           {
             meals: meals,
           },
-          this.applyFilters
+          this.applyFilters,
         );
       } catch (error) {
         this.setState({ error: "Failed to load data", meals: [] });
@@ -169,7 +166,6 @@ class Home extends Component {
         showSnackbar: true,
         snackbarMessage: "Item removed in wishlist!",
       });
-      // return;
     } else {
       // Add to wishlist
       wishlist.push(mealId);
@@ -183,10 +179,9 @@ class Home extends Component {
     localStorage.setItem(`wishlist`, JSON.stringify(wishlist));
     this.setState({ wishList: wishlist });
 
-    // Auto close after 0.5 second
     setTimeout(() => {
       this.setState({ showSnackbar: false });
-    }, 500);
+    }, 1000);
   };
 
   render() {
@@ -290,7 +285,6 @@ class Home extends Component {
         <div className="meals-grid">
           {paginatedMeals.length > 0 ? (
             paginatedMeals.map((meal) => (
-              // meal card component
               <MealCard
                 key={meal.idMeal}
                 meal={meal}
@@ -315,7 +309,7 @@ class Home extends Component {
                       searchTerm: "",
                       selectedCategory: "",
                     },
-                    this.applyFilters
+                    this.applyFilters,
                   )
                 }
                 className="reset-filters-btn"

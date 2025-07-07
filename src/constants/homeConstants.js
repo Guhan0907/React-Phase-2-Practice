@@ -176,4 +176,15 @@ const SignUpFields = [
   },
 ];
 
-export { countries, countriesFlag, LoginFields, SignUpFields };
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const strongPasswordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+export {
+  countries,
+  countriesFlag,
+  LoginFields,
+  SignUpFields,
+  emailRegex,
+  strongPasswordRegex,
+};

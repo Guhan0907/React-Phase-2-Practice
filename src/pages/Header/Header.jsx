@@ -14,14 +14,13 @@ class Header extends Component {
       localStorage.removeItem(`wishlist`);
       localStorage.removeItem(`hasReloaded`);
     }
-    window.location.reload();
-    // this.props.navigate("/");
+    this.props.onLogout();
+    // window.location.reload();
   };
 
   render() {
     const { navigate, location } = this.props;
     const isLoggedIn = localStorage.getItem("email") !== null;
-    console.log("rerender", isLoggedIn);
 
     return (
       <div className="header">

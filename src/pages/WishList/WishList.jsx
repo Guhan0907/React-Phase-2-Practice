@@ -34,7 +34,7 @@ class Cart extends Component {
 
     try {
       const mealRequests = wishlistIds.map((id) =>
-        axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+        axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`),
       );
       const mealResponses = await Promise.all(mealRequests);
       const meals = mealResponses.map((res) => res.data.meals[0]);
@@ -56,14 +56,14 @@ class Cart extends Component {
     this.setState(
       (prevState) => ({
         wishlistMeals: prevState.wishlistMeals.filter(
-          (meal) => meal.idMeal !== mealId
+          (meal) => meal.idMeal !== mealId,
         ),
       }),
       () => {
         if (this.state.wishlistMeals.length === 0) {
           this.setState({ error: "Your wishlist is empty." });
         }
-      }
+      },
     );
   };
 
