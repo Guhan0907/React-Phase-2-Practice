@@ -7,7 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Shimmer from "../Shimmer/Shimmer";
 import { Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import "../Cart/Cart.css";
+import "./WishList.css";
 
 class Cart extends Component {
   constructor(props) {
@@ -81,15 +81,7 @@ class Cart extends Component {
           />
           <h2>Your wishlist is empty.</h2>
 
-          <div className="back-button-container">
-            <Button
-              variant="outlined"
-              startIcon={<ArrowBackIcon />}
-              onClick={() => this.props.navigate(-1)}
-            >
-              Back
-            </Button>
-          </div>
+          <div className="back-button-container"></div>
         </div>
       );
     }

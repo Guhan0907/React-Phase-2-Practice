@@ -8,15 +8,6 @@
   align-items: center;
 }
 
-/* .meals-heading {
-  font-family: "Roboto Slab", serif;
-  margin-top: 20px;
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: #333;
-} */
-
 .meals-grid {
   display: flex;
   flex-wrap: wrap;
@@ -27,7 +18,7 @@
 
 .meals-card {
   background-color: #f3f4f5;
-  border: 2px solid #C0C0C0;
+  border: 2px solid #c0c0c0;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(151, 107, 107, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -39,8 +30,8 @@
   align-items: center;
   position: relative;
   font-family: "Roboto Slab", serif;
-   /* NEW STYLE */
-   min-height: 330px;
+  /* NEW STYLE */
+  min-height: 330px;
 }
 
 .meals-card:hover {
@@ -128,8 +119,6 @@ a:hover {
 /* Filter section */
 
 .filter-section {
-  /* display: flex;
-  flex-direction: column; */
   width: 100%;
   overflow-x: auto;
   padding: 10px 0;
@@ -139,13 +128,8 @@ a:hover {
 .flag-chip-scroll-container {
   width: 100%;
   overflow-x: auto;
-  /* padding: 10px 0; */
   margin-bottom: 0.5rem;
 }
-
-/* .flag-chip-scroll-container::-webkit-scrollbar {
-  width: 8px;
-} */
 
 .flag-chip-row {
   display: flex;
@@ -154,7 +138,6 @@ a:hover {
   min-width: max-content;
   padding-bottom: 2px;
 }
-
 
 .category-chip-scroll {
   width: 100%;
@@ -165,18 +148,6 @@ a:hover {
 .category-chip-scroll::-webkit-scrollbar {
   display: none;
 }
-
-
-/* latest search after cart is addeded */
-
-/* .top-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  max-width: 800px;
-  margin-bottom: 1.5rem;
-} */
 
 .top-bar {
   display: flex;
@@ -191,9 +162,6 @@ a:hover {
   width: 100%;
   max-width: 600px;
 }
-
-
-
 
 .wishlist-icon-wrapper {
   position: absolute;
@@ -219,6 +187,34 @@ a:hover {
   color: #e91e63;
 }
 
+/* filter option */
+
+.search-filter-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-left: 8rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  max-width: 100%;
+}
+
+.search-bar-wrapper {
+  flex: 1 1 150px;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-filter-wrapper {
+  flex: 1 1 300px;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 /* Responsive layout  */
 @media (max-width: 768px) {
   .meals-container {
@@ -238,7 +234,30 @@ a:hover {
 
   .meals-card {
     width: 100%;
-    /* max-width: 90vw; */
     max-width: 90%;
+  }
+
+  .search-filter-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+    margin-bottom: 1px; /* reduce bottom margin */
+    margin-left: 0px;
+  }
+
+  .search-bar-wrapper,
+  .dropdown-filter-wrapper {
+    flex: unset;
+    width: 100%;
+    justify-content: center;
+    margin: 0;
+  }
+
+  .dropdown-filter-wrapper {
+    margin-bottom: 18px;
+  }
+
+  .dropdown-filter-wrapper .MuiFormControl-root {
+    margin-bottom: 0 !important;
   }
 }

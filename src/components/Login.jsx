@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./component.css";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { useNavigation , useNavigate } from "react-router-dom";
+import { useNavigation, useNavigate } from "react-router-dom";
 // button
 const LoginFields = [
   {
@@ -82,22 +82,11 @@ class Login extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  // handleOnSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log("Form Data:", this.state);
-  //   this.props.onLogin(this.state);
-  // };
-
   handleOnSubmit = (e) => {
-  e.preventDefault();
-  // const isValid = this.validateForm("email") && this.validateForm("password");
-  // if (isValid) {
-  //   localStorage.setItem("email", this.state.email);
-  //   this.props.navigate("/");  // Redirect to home after login
-  // }
-  this.props.onLogin(this.state);
-};
+    e.preventDefault();
 
+    this.props.onLogin(this.state);
+  };
 
   render() {
     return (
@@ -157,10 +146,3 @@ class Login extends Component {
 }
 
 export default Login;
-
-// function LoginFunction(props) {
-//   const navigate = useNavigate();
-//   return <Login {...props} navigate={navigate} />;
-// }
-
-// export default LoginFunction;

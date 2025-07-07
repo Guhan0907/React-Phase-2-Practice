@@ -1,64 +1,37 @@
 import React, { Component } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./component.css";
-import { useNavigate } from "react-router-dom";
+import { LoginFields, SignUpFields } from "../constants/homeConstants";
 
-const SignUpFields = [
-  {
-    name: "userName",
-    label: "Username",
-    type: "text",
-    placeholder: "Enter your username",
-  },
-  {
-    name: "email",
-    label: "Email",
-    type: "email",
-    placeholder: "Enter your email",
-  },
-  {
-    name: "password",
-    label: "Password",
-    type: "password",
-    placeholder: "Enter your password",
-  },
-  {
-    name: "confirmPassword",
-    label: "Confirm Password",
-    type: "password",
-    placeholder: "Re-enter your password",
-  },
-];
-
-class SignUp extends Component {
+class SigninPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: "",
+      isLogin: true,
       email: "",
       password: "",
+      userName: "",
       confirmPassword: "",
-      errors: {
-        userName: false,
-        email: false,
-        password: false,
-        confirmPassword: false,
-      },
-      helperText: {
-        userName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-      },
-      touched: {
-        userName: false,
-        email: false,
-        password: false,
-        confirmPassword: false,
-      },
+      errors: {},
+      helperText: {},
+      touched: {},
     };
   }
+
+  toggleMode = () => {
+    this.setState({
+      isLogin: !this.state.isLogin,
+      errors: {},
+      helperText: {},
+      touched: {},
+    });
+  };
+
+  handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
   validateField = (field) => {
     const { userName, email, password, confirmPassword } = this.state;
@@ -104,12 +77,14 @@ class SignUp extends Component {
           helperText.password = "";
         }
 
-        // Re-check confirmPassword when password changes
-        if (confirmPassword && confirmPassword !== password) {
+        if (
+          !this.state.isLogin &&
+          confirmPassword &&
+          confirmPassword !== password
+        ) {
           errors.confirmPassword = true;
           helperText.confirmPassword = "Passwords do not match";
-          touched.confirmPassword = true;
-        } else if (confirmPassword && confirmPassword === password) {
+        } else {
           errors.confirmPassword = false;
           helperText.confirmPassword = "";
         }
@@ -136,32 +111,53 @@ class SignUp extends Component {
     return isValid;
   };
 
-  handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+  validateLoginForm = () => {
+    return this.validateField("email") & this.validateField("password");
   };
 
-  handleOnSubmit = (e) => {
+  validateSignUpForm = () => {
+    return (
+      this.validateField("userName") &
+      this.validateField("email") &
+      this.validateField("password") &
+      this.validateField("confirmPassword")
+    );
+  };
+
+  handleSubmit = (e) => {
     e.preventDefault();
 
-    const fields = ["userName", "email", "password", "confirmPassword"];
-    const allValid = fields.every((field) => this.validateField(field));
-
-    if (allValid) {
-      this.props.onSignUp(this.state);
+    if (this.state.isLogin) {
+      const isValid = this.validateLoginForm();
+      if (isValid) {
+        localStorage.setItem("email", this.state.email);
+        this.props.onLoginStatusChange(true);
+        this.props.navigate("/");
+      }
+    } else {
+      const isValid = this.validateSignUpForm();
+      if (isValid) {
+        localStorage.setItem("email", this.state.email);
+        this.props.onLoginStatusChange(true);
+        this.props.navigate("/");
+      }
     }
   };
 
   render() {
+    const { isLogin } = this.state;
+    const fields = isLogin ? LoginFields : SignUpFields;
+
     return (
       <div className="login-wrapper">
         <div className="login-card">
-          <h2 className="login-title">Sign Up</h2>
+          <h2 className="login-title">{isLogin ? "Login" : "Sign Up"}</h2>
           <Box
             sx={{ "& > :not(style)": { mb: 2, width: "100%" } }}
             noValidate
             autoComplete="off"
           >
-            {SignUpFields.map(({ name, label, type, placeholder }) => (
+            {fields.map(({ name, label, type, placeholder }) => (
               <TextField
                 key={name}
                 name={name}
@@ -177,22 +173,30 @@ class SignUp extends Component {
                 helperText={this.state.helperText[name]}
               />
             ))}
+
             <button
               type="submit"
               className="login-button"
-              onClick={this.handleOnSubmit}
+              onClick={this.handleSubmit}
             >
-              Sign Up
+              {isLogin ? "Login" : "Sign Up"}
             </button>
             <br />
-            Do you have an account ?{" "}
-            <button
-              type="submit"
-              className="login-button"
-              onClick={() => this.props.goToLogin()}
-            >
-              Login
-            </button>
+            {isLogin ? (
+              <>
+                Don’t have an account?{" "}
+                <button className="login-button" onClick={this.toggleMode}>
+                  Sign Up
+                </button>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <button className="login-button" onClick={this.toggleMode}>
+                  Login
+                </button>
+              </>
+            )}
           </Box>
         </div>
       </div>
@@ -200,10 +204,10 @@ class SignUp extends Component {
   }
 }
 
-function SignUpFunction(props) {
+function SigninPageWrapper(props) {
   const navigate = useNavigate();
-
-  return <SignUp {...props} navigate={navigate} />;
+  const location = useLocation();
+  return <SigninPage {...props} navigate={navigate} location={location} />;
 }
 
-export default SignUpFunction;
+export default SigninPageWrapper;

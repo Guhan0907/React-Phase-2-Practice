@@ -11,32 +11,6 @@ body {
   line-height: 1.6;
 }
 
-/* back button */
-
-/* .top-left-back {
-  position: fixed;
-  top: 5rem;
-  left: 1rem;
-  z-index: 999;
-} */
-
-/* .back-button-global {
-  background: #4f46e5;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  transition: background 0.2s ease;
-} */
-
-/* .back-button-global:hover {
-  background: #4338ca;
-} */
-
 /* Container */
 .meal-details-container {
   max-width: 800px;
@@ -59,20 +33,6 @@ body {
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
-
-/* Tags */
-/* .meal-tags {
-  margin-bottom: 1rem;
-} */
-
-/* .tag {
-  display: inline-block;
-  margin: 0.25rem 0.5rem;
-  padding: 0.4rem 1rem;
-  border-radius: 20px;
-  background-color: #eee;
-  font-size: 0.85rem;
-} */
 
 /* Image */
 .meal-image {
@@ -135,23 +95,6 @@ body {
 .video-link:hover {
   background-color: #dc2626;
 }
-
-/* Additional Info */
-/* .additional-info {
-  text-align: left;
-  background: #f3f4f6;
-  padding: 1rem;
-  border-radius: 8px;
-}
-
-.source-link {
-  color: #4f46e5;
-  text-decoration: none;
-}
-
-.source-link:hover {
-  text-decoration: underline;
-} */
 
 /* Loading & Error */
 .loading-container,

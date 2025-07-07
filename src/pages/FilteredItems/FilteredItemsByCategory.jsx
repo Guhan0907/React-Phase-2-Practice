@@ -3,7 +3,7 @@ import "../Home/Home.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { countries } from "../../constants/homeConstants";
-import { Button , Pagination} from "@mui/material";
+import { Button, Pagination } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Shimmer from "../Shimmer/Shimmer";
 import { itemDetailsApi } from "../../services/apiCalls";
@@ -34,22 +34,11 @@ class FilteredItemsByCategory extends Component {
       const data = response.data;
 
       if (data.meals) {
-        // try error handling if one promise goes off............................
         const fullMeals = await Promise.all(
-          data.meals.map(async (meal) => 
-            // const res = await axios.get(
-            //   `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
-            // );
-            // return res.data.meals?.[0]; // to avoid the data to get wrapped in array
-            itemDetailsApi(meal.idMeal)
-            .then((res) => res.data.meals?.[0])
+          data.meals.map(async (meal) =>
+            itemDetailsApi(meal.idMeal).then((res) => res.data.meals?.[0])
           )
         );
-
-        // const fullMeals = data.meals.map(async (meal) => {
-        //   itemDetailsApi(meal.idMeal)
-        // .then((res) => this.setState({meals : res.data.meals?.[0]}));
-        // })
 
         this.setState({ meals: fullMeals.filter(Boolean), loading: false });
       } else {
@@ -97,25 +86,6 @@ class FilteredItemsByCategory extends Component {
 
     return (
       <div className="meals-container">
-        {/* <Button
-          variant="outlined"
-          startIcon={<ArrowBackIcon />}
-          onClick={this.handleBack}
-          sx={{
-            position: "fixed",
-            top: 60,
-            left: 16,
-            zIndex: 1000,
-            backgroundColor: "white",
-            boxShadow: 2,
-            "&:hover": {
-              backgroundColor: "#f0f0f0",
-            },
-          }}
-        >
-          Back
-        </Button> */}
-
         <h1 className="meals-heading">Meals in {this.props.params.str}</h1>
 
         <div className="meals-grid">

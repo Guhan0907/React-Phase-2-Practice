@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import "../../pages/Home/Home.css"
+import "../../pages/Home/Home.css";
 
 class MealCard extends Component {
   handleCardClick = () => {

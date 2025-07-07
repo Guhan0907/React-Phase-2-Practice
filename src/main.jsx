@@ -3,16 +3,13 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ItemDetailsFunction from "./pages/ItemDetails/ItemDetails.jsx";
 import FilteredItemsByCategoryFunction from "./pages/FilteredItems/FilteredItemsByCategory.jsx";
-import CartFunction from "./pages/Cart/Cart.jsx";
+import CartFunction from "./pages/WishList/WishList.jsx";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import ProtectedRoutes from "./constants/Protectedroutes.jsx";
-import Login from "./components/Login.jsx";
-import SignUp from "./components/SignUp.jsx";
 import PageNotFoundFunction from "./pages/PageNotFound.jsx";
-import MainLayout from "./pages/Header/MainLayout.jsx";
-import AuthenticationFunction from "./pages/Authentication.jsx";
 import HomeFunction from "./pages/Home/Home.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import AppFunction from "./App.jsx";
 
 const themeObj = createTheme({
   palette: {
@@ -25,82 +22,19 @@ const themeObj = createTheme({
   },
 });
 
-// const rout = createBrowserRouter([
-//   {
-//     path: "/login",
-//     element: <MainLayout />,
-//     children: [
-//       {
-//         index: true,  
-//         element: <ProtectedRoutes> <HomeFunction/> </ProtectedRoutes>,
-//         // element : <HomeFunction />
-//       },
-//       // {
-//       //   index : true,
-//       //   element : <AuthenticationFunction />
-//       // },
-//       // {
-//       //   path : "/",
-//       //   element : <ProtectedRoutes> <HomeFunction /> </ProtectedRoutes>
-//       // },
-//       {
-//         path: "meals/:id",
-//         element: (
-//           <ProtectedRoutes>
-//             <ItemDetailsFunction />
-//           </ProtectedRoutes>
-//         ),
-//       },
-//       {
-//         path: "category/:str",
-//         element: (
-//           <ProtectedRoutes>
-//             <FilteredItemsByCategoryFunction />
-//           </ProtectedRoutes>
-//         ),
-//       },
-//       {
-//         path: "wishlist",
-//         element: (
-//           <ProtectedRoutes>
-//             <CartFunction />
-//           </ProtectedRoutes>
-//         ),
-//       },
-//     ],
-//   },
-//   {
-//     path: "/login",
-//     element: <AuthenticationFunction />,
-//   },
-//   {
-//     path: "/signup",
-//     element: <SignUp />,
-//   },
-//   {
-//     path: "*",
-//     element: <PageNotFoundFunction />,
-//   },
-// ]);
-
-
 const rout = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: <AppFunction />,
     children: [
-      // {
-      //   index: true,  
-      //   element: <ProtectedRoutes> <HomeFunction /> </ProtectedRoutes>,
-      // },
       {
-        index : true,
-        element : <AuthenticationFunction />
+        index: true,
+        element: (
+          <ProtectedRoutes>
+            <HomeFunction />
+          </ProtectedRoutes>
+        ),
       },
-      // {
-      //   path : "/home",
-      //   element : <HomeFunction />
-      // },
       {
         path: "meals/:id",
         element: (
@@ -128,24 +62,15 @@ const rout = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
-    element: <AuthenticationFunction />,
-  },
-  {
-    path: "/signup",
-    element: <AuthenticationFunction />,
-  },
-  {
     path: "*",
     element: <PageNotFoundFunction />,
   },
 ]);
 
-
 createRoot(document.getElementById("root")).render(
   <ErrorBoundary>
     <ThemeProvider theme={themeObj}>
-    <RouterProvider router={rout} />
-  </ThemeProvider>
+      <RouterProvider router={rout} />
+    </ThemeProvider>
   </ErrorBoundary>
 );
