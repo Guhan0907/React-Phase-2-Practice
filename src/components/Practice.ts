@@ -14,7 +14,7 @@
 // type CarNumber = number;
 // type CarName = String;
 // type CarRange = Boolean;
-// // Boolean CarRange = 
+// // Boolean CarRange =
 
 // var naming: CarNumber = 57;
 // // naming: CarNumber = "Hello;
@@ -24,7 +24,6 @@
 // type Car = {
 //     year : CarYear;
 // }
-
 
 // interface tria {
 //     height : number,
@@ -39,7 +38,7 @@
 // console.log(area.height * area.widht)
 
 // function multiply(a: number , b: number): number {
-//     return a+b;    
+//     return a+b;
 // }
 
 // console.log(multiply(7,9))
@@ -49,15 +48,23 @@
 // console.log(val);
 
 let value = "hello";
-let lengh = (<string>value).length;
-console.log(lengh)
+// let lengh = (<string>value).length;
+// console.log(lengh)
+console.log(value);
 
+// console.log("")
 
- 
- 
+// interface trialing {
+//     height : number,
+//     width : number
+// }
 
+function multipl(a: number, b: number): number {
+  return a * b;
+}
 
+console.log(multipl(67, 76789));
 
+console.log("hello  => ");
 
-
-
+// console.error((error) => throw)
