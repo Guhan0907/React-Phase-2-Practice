@@ -35,8 +35,8 @@ export type CounterActionTypes = incrementAction | decrementAction;
 export type UserActionTypes = setUserAction;
 
 
-export const fetchUserAsync = () => {
-    return async(dispatch : Dispatch) => {
-        
-    }
-}
+// export const fetchUserAsync = () => {
+//     return async(dispatch : Dispatch) => {
+
+//     }
+// }
