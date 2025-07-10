@@ -1,7 +1,11 @@
+import { useSelector } from "react-redux";
 import { useCount } from "./countContext";
 
 export const Counter = () => {
-  const { count, setCount } = useCount();
+  // const { count, setCount } = useCount();
+  const { count } = useSelector((state: any) => ({
+    count: state.count,
+  }));
   return (
     <div className="text-center mt-3">
       <h2 className="text-2xl">Counter Component</h2>
