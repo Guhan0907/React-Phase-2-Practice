@@ -1,12 +1,14 @@
-// // import { createStoreHook } from "react-redux";
-// import { createStore } from "redux";
-// import { counterReducer } from "./reducer";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
+import { counterReducer, userReducer } from "./reducer";
+import logger from "redux-logger";
+import { thunk } from "redux-thunk";
 
-// export const store = createStore(counterReducer);
+let middlewareList = [thunk, logger];
 
-import { createStore } from "redux";
-import { counterReducer } from "./reducer";
+const enhancer = compose(applyMiddleware(...middlewareList));
 
-export const store = createStore(counterReducer);
-
-// export type RootState = ReturnType<typeof store.getState >
+export const rootreducer = combineReducers({
+  counterReducer,
+  userReducer,
+});
+export const store = createStore(rootreducer, enhancer);
