@@ -1,23 +1,28 @@
-import type { CounterActionTypes ,UserActionTypes } from "./action";
-import { INCREMENT, DECREMENT , SET_USERS } from "./actionTypes";
+import { isAction } from "redux";
+import type { CounterActionTypes, UserActionTypes } from "./action";
+import { INCREMENT, DECREMENT, SET_USERS, PERSIST_USER } from "./actionTypes";
+import type { CounterState, UserState } from "./types";
 
-export interface CounterState {
-  count: number;
-}
+// export interface CounterState {
+//   count: number;
+// }
 
-export interface UserState {
-    users : string;
-}
-
+// export interface UserState {
+//   users: string[];
+// }
 
 // initial states
 const initialState: CounterState = {
-  count: 9
+  count: 9,
 };
 
 const initialUserState: UserState = {
-    users : "guhan"
-}
+  users: ["Guhan"],
+};
+
+const initialPersistState: UserState = {
+  users: [],
+};
 
 export const counterReducer = (
   state = initialState,
@@ -33,17 +38,30 @@ export const counterReducer = (
   }
 };
 
-
 export const userReducer = (
-    state = initialUserState,
-    action : UserActionTypes,
+  state = initialUserState,
+  action: UserActionTypes,
 ): UserState => {
-    switch(action.type) {
-        case SET_USERS : 
-            return {...state , users : action.payload}
+  switch (action.type) {
+    case SET_USERS:
+      return { ...state, users: [...state.users, action.payload] };
 
-        default :
-            return state;
-    }
-}
+    // case PERSIST_USER:
+    //   return { ...state, users: [...state.users, action.payload] };
 
+    default:
+      return state;
+  }
+};
+
+export const persistReducerVal = (
+  state = initialPersistState,
+  action: UserActionTypes,
+): UserState => {
+  switch (action.type) {
+    case PERSIST_USER:
+      return { ...state, users: [...state.users, action.payload] };
+    default:
+      return state;
+  }
+};

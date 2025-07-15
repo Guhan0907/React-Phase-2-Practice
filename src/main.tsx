@@ -4,15 +4,17 @@ import App from "./App.tsx";
 import { CountProvider } from "./components/countContext.tsx";
 import { Counter } from "./components/Counter.tsx";
 import { Provider } from "react-redux";
-import { store } from "./redux/store.ts";
+import { store, persistor } from "./redux/store.ts";
+import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   // <Provider store={store}>
   <Provider store={store}>
-    {/* {console.log("store", store.getState())} */}
-    <CountProvider>
-      <App />
-      <Counter />
-    </CountProvider>
+    <PersistGate loading={null} persistor={persistor}>
+      <CountProvider>
+        <App />
+        <Counter />
+      </CountProvider>
+    </PersistGate>
   </Provider>,
 );

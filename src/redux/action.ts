@@ -1,5 +1,6 @@
-import { INCREMENT, DECREMENT, SET_USERS } from "./actionTypes";
-import { Dispatch } from "redux";
+import type { Dispatch } from "redux";
+import { INCREMENT, DECREMENT, SET_USERS, PERSIST_USER } from "./actionTypes";
+// import { Dispatch } from "redux";
 
 export interface incrementAction {
   type: typeof INCREMENT;
@@ -9,11 +10,19 @@ export interface decrementAction {
   type: typeof DECREMENT;
 }
 
-// another action for users
+// for storing the data from the Api also
 export interface setUserAction {
-    type : typeof SET_USERS,
-    payload: string
+  type: typeof SET_USERS;
+  payload: string;
 }
+
+// for the persist action
+export interface persistUserAction {
+  type: typeof PERSIST_USER;
+  payload: string;
+}
+
+//🔥 below is different
 
 export const increment = (): incrementAction => ({
   type: INCREMENT,
@@ -24,19 +33,35 @@ export const decrement = (): decrementAction => ({
   type: DECREMENT,
 });
 
-// another action for the users 
-export const setUser = (name : string) : setUserAction => ({
-    type : SET_USERS,
-    payload :name
-})
+// for also string the data in the array
+export const setUser = (names: string): setUserAction => ({
+  type: SET_USERS,
+  payload: names,
+});
 
+export const persistUser = (values: string): persistUserAction => ({
+  type: PERSIST_USER,
+  payload: values,
+});
+
+export const fetchUsers = () => {
+  return async (dispatch: Dispatch<UserActionTypes>) => {
+    try {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users",
+      );
+      const data = await response.json();
+
+      // const userNames = data.map((user:any) => user.name);
+      const randomUser = data[Math.floor(Math.random() * data.length)];
+      const randomName = randomUser.name;
+      dispatch(persistUser(randomName));
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    }
+  };
+};
 
 export type CounterActionTypes = incrementAction | decrementAction;
-export type UserActionTypes = setUserAction;
-
-
-// export const fetchUserAsync = () => {
-//     return async(dispatch : Dispatch) => {
-
-//     }
-// }
+// export type UserActionTypes = setUserAction ;
+export type UserActionTypes = setUserAction | persistUserAction;
