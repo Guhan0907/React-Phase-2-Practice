@@ -15,7 +15,7 @@ const enhancer = compose(applyMiddleware(...middlewareList));
 const persistConfig = {
   key: "root",
   storage: storage,
-  whitelist: ["userReducer", "persistReducerVal"],
+  whitelist: ["persistReducerVal"],
 };
 
 export const rootreducer = combineReducers({

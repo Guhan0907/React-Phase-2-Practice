@@ -2,6 +2,7 @@ import type { Dispatch } from "redux";
 import { INCREMENT, DECREMENT, SET_USERS, PERSIST_USER } from "./actionTypes";
 // import { Dispatch } from "redux";
 
+// below is for the typescript interface
 export interface incrementAction {
   type: typeof INCREMENT;
 }

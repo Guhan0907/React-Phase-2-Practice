@@ -1,11 +1,11 @@
 import { isAction } from "redux";
 import type { CounterActionTypes, UserActionTypes } from "./action";
 import { INCREMENT, DECREMENT, SET_USERS, PERSIST_USER } from "./actionTypes";
-import type { CounterState, UserState } from "./types";
+import type { CounterState, UserState, PersistValState } from "./types";
 
 // export interface CounterState {
 //   count: number;
-// }
+// }  
 
 // export interface UserState {
 //   users: string[];
@@ -17,10 +17,10 @@ const initialState: CounterState = {
 };
 
 const initialUserState: UserState = {
-  users: ["Guhan"],
+  users: "Guhan",
 };
 
-const initialPersistState: UserState = {
+const initialPersistState: PersistValState = {
   users: [],
 };
 
@@ -44,7 +44,7 @@ export const userReducer = (
 ): UserState => {
   switch (action.type) {
     case SET_USERS:
-      return { ...state, users: [...state.users, action.payload] };
+      return { ...state, users:action.payload };
 
     // case PERSIST_USER:
     //   return { ...state, users: [...state.users, action.payload] };
@@ -57,7 +57,7 @@ export const userReducer = (
 export const persistReducerVal = (
   state = initialPersistState,
   action: UserActionTypes,
-): UserState => {
+): PersistValState => {
   switch (action.type) {
     case PERSIST_USER:
       return { ...state, users: [...state.users, action.payload] };

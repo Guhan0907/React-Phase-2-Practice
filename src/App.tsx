@@ -3,6 +3,7 @@ import { useCount } from "./components/countContext";
 import { useDispatch } from "react-redux";
 import { fetchUsers, increment, setUser } from "./redux/action";
 import type { Dispatch } from "redux";
+import { useCallback } from "react";
 
 function App() {
   const { count, setCount } = useCount();
@@ -14,8 +15,8 @@ function App() {
       <div className="card">
         {/* <button onClick={() => setCount((count) => count + 1)}> */}
         <button onClick={() => dispatch(increment())}>count is {count}</button>
-        <button onClick={() => dispatch(setUser("Gojo Satoru"))}>
-          {" "}
+
+        <button onClick={() => dispatch(setUser("Ayanokoji"))}>
           Name Change{" "}
         </button>
         <button onClick={() => dispatch(fetchUsers())}> Name Adding </button>

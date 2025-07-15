@@ -6,3 +6,4 @@ export const SET_USERS = "SET_USERS";
 
 // persist
 export const PERSIST_USER = "PERSIST_USER";
+export const EDIT_PERSIST_USER = "EDIT_PERSIST_USER";
