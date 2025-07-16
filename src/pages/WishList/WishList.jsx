@@ -8,6 +8,8 @@ import Shimmer from "../Shimmer/Shimmer";
 import { Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./WishList.css";
+import { connect } from "react-redux";
+import { removeFromWishlist } from "../../redux/action";
 
 class Cart extends Component {
   constructor(props) {
@@ -23,14 +25,38 @@ class Cart extends Component {
     this.loadWishlistMeals();
   }
 
+  // loadWishlistMeals = async () => {
+  //   const email = localStorage.getItem("email");
+  //   // const {wishlistIds} = this.props;
+
+  //   if (!email) {
+  //     this.setState({ wishlistMeals: [], loading: false });
+  //     return;
+  //   }
+
+  //   const wishlistIds = JSON.parse(localStorage.getItem(`wishlist`)) || [];
+
+  //   try {
+  //     const mealRequests = wishlistIds.map((id) =>
+  //       axios.get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`),
+  //     );
+  //     const mealResponses = await Promise.all(mealRequests);
+  //     const meals = mealResponses.map((res) => res.data.meals[0]);
+
+  //     this.setState({ wishlistMeals: meals, loading: false });
+  //   } catch (error) {
+  //     this.setState({ error: error.message, loading: false });
+  //   }
+  // };
+
+  // updated loadWishlistMeals function
   loadWishlistMeals = async () => {
-    const email = localStorage.getItem("email");
-    if (!email) {
+    const { wishlistIds } = this.props;
+
+    if (!wishlistIds || wishlistIds.length === 0) {
       this.setState({ wishlistMeals: [], loading: false });
       return;
     }
-
-    const wishlistIds = JSON.parse(localStorage.getItem(`wishlist`)) || [];
 
     try {
       const mealRequests = wishlistIds.map((id) =>
@@ -45,26 +71,37 @@ class Cart extends Component {
     }
   };
 
+  // removeFromWishlist = (mealId) => {
+  //   const email = localStorage.getItem("email");
+  //   if (!email) return;
+
+  //   let wishlist = JSON.parse(localStorage.getItem(`wishlist`)) || [];
+  //   wishlist = wishlist.filter((id) => id !== mealId);
+  //   localStorage.setItem(`wishlist`, JSON.stringify(wishlist));
+
+  //   this.setState(
+  //     (prevState) => ({
+  //       wishlistMeals: prevState.wishlistMeals.filter(
+  //         (meal) => meal.idMeal !== mealId,
+  //       ),
+  //     }),
+  //     () => {
+  //       if (this.state.wishlistMeals.length === 0) {
+  //         this.setState({ error: "Your wishlist is empty." });
+  //       }
+  //     },
+  //   );
+  // };
+
+  // updated removeFromWishlist function
   removeFromWishlist = (mealId) => {
-    const email = localStorage.getItem("email");
-    if (!email) return;
+    this.props.removeFromWishlist(mealId); // dispatch redux action
 
-    let wishlist = JSON.parse(localStorage.getItem(`wishlist`)) || [];
-    wishlist = wishlist.filter((id) => id !== mealId);
-    localStorage.setItem(`wishlist`, JSON.stringify(wishlist));
-
-    this.setState(
-      (prevState) => ({
-        wishlistMeals: prevState.wishlistMeals.filter(
-          (meal) => meal.idMeal !== mealId,
-        ),
-      }),
-      () => {
-        if (this.state.wishlistMeals.length === 0) {
-          this.setState({ error: "Your wishlist is empty." });
-        }
-      },
-    );
+    this.setState((prevState) => ({
+      wishlistMeals: prevState.wishlistMeals.filter(
+        (meal) => meal.idMeal !== mealId,
+      ),
+    }));
   };
 
   render() {
@@ -131,4 +168,13 @@ function CartFunction(props) {
   return <Cart {...props} navigate={navigate} />;
 }
 
-export default CartFunction;
+const mapStateToProps = (state) => ({
+  wishlistIds: state.wishlist.values, // array of meal IDs
+});
+
+const mapDispatchToProps = {
+  removeFromWishlist,
+};
+
+// export default CartFunction;
+export default connect(mapStateToProps, mapDispatchToProps)(CartFunction);

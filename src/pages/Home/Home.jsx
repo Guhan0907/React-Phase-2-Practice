@@ -12,6 +12,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Close";
 import InputAdornment from "@mui/material/InputAdornment";
 import { HomeApi, categoryApi, searchMealApi } from "../../services/apiCalls";
+import { connect, useDispatch } from "react-redux";
+import { addToWishlist, removeFromWishlist } from "../../redux/action";
 
 class Home extends Component {
   constructor(props) {
@@ -159,9 +161,12 @@ class Home extends Component {
     if (!email) return;
 
     let wishlist = [...this.state.wishList];
+    // const {addToWishlist , removeFromWishList , dispatch } = this.props;
+    const { addToWishlist, removeFromWishlist } = this.props;
 
     if (wishlist.includes(mealId)) {
       wishlist = wishlist.filter((id) => id !== mealId);
+      removeFromWishlist(mealId); // for redux
       this.setState({
         showSnackbar: true,
         snackbarMessage: "Item removed in wishlist!",
@@ -169,6 +174,7 @@ class Home extends Component {
     } else {
       // Add to wishlist
       wishlist.push(mealId);
+      addToWishlist(mealId); // for redux
 
       this.setState({
         showSnackbar: true,
@@ -356,7 +362,6 @@ class Home extends Component {
 function HomeFunction(props) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
   return (
     <Home
       {...props}
@@ -366,4 +371,8 @@ function HomeFunction(props) {
   );
 }
 
-export default HomeFunction;
+// export default HomeFunction;
+export default connect(null, {
+  addToWishlist,
+  removeFromWishlist,
+})(HomeFunction);

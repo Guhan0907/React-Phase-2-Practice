@@ -9,6 +9,8 @@ import PageNotFoundFunction from "./pages/PageNotFound.jsx";
 import HomeFunction from "./pages/Home/Home.jsx";
 import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import AppFunction from "./App.jsx";
+import { Provider } from "react-redux";
+import { store } from "./redux/store.js";
 
 const themeObj = createTheme({
   palette: {
@@ -68,8 +70,10 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <ErrorBoundary>
-    <ThemeProvider theme={themeObj}>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={themeObj}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </Provider>
   </ErrorBoundary>,
 );
