@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import Header from "./Header";
+import { expect } from "vitest";
 
 beforeEach(() => {
   localStorage.clear();
@@ -55,5 +56,24 @@ describe("Header Component", () => {
     expect(localStorage.getItem("email")).toBeNull();
     expect(localStorage.getItem("wishlist")).toBeNull();
     expect(mockLogout).toHaveBeenCalled();
+  });
+
+  it("renders title correctly", () => {
+    const res = render(
+      <MemoryRouter>
+        <Header onLogout={() => {}} />
+      </MemoryRouter>,
+    );
+    expect(res).toMatchSnapshot();
+  });
+
+  it("renders correctly when the user logged in", () => {
+    localStorage.setItem("email", "test@example.com");
+    const res = render(
+      <MemoryRouter>
+        <Header onLogout={() => {}} />
+      </MemoryRouter>,
+    );
+    expect(res).toMatchSnapshot();
   });
 });

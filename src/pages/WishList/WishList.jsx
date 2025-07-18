@@ -135,7 +135,7 @@ class Cart extends Component {
                 className="meals-image"
               />
               <div className="meals-card-content">
-                <h3 className="meals-title">{meal.strMeal}</h3>
+                <h3 className="meals-title" data-testid={`mealTitle${meal?.strMeal || ''}`}>{meal.strMeal}</h3>
 
                 <Link to={`/category/${meal.strCategory}`}>
                   <p className="meals-category">{meal.strCategory}</p>
@@ -147,6 +147,7 @@ class Cart extends Component {
               </div>
               <div className="delete-icon-wrapper">
                 <IconButton
+                  data-testid={`removeFromWishlistCta${meal?.idMeal || ''}`}
                   onClick={() => this.removeFromWishlist(meal.idMeal)}
                   color="error"
                   size="small"

@@ -18,7 +18,8 @@ const mockMeal = {
   strArea: "Japanese",
   strInstructions:
     "Step 1: Preheat oven to 350 degrees.\nStep 2: Cook chicken.\nStep 3: Mix sauce.",
-  strMealThumb: "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg",
+  strMealThumb:
+    "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg",
   strYoutube: "https://www.youtube.com/watch?v=4aZr5hZXP_s",
   strIngredient1: "soy sauce",
   strMeasure1: "3/4 cup",
@@ -38,7 +39,7 @@ describe("ItemDetails Component", () => {
         <Routes>
           <Route path="/meals/:id" element={<ItemDetailsFunction />} />
         </Routes>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
     expect(screen.getByText(/Loading meal details/i)).toBeInTheDocument();
   });
@@ -49,11 +50,13 @@ describe("ItemDetails Component", () => {
         <Routes>
           <Route path="/meals/:id" element={<ItemDetailsFunction />} />
         </Routes>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Teriyaki Chicken Casserole")).toBeInTheDocument();
+      expect(
+        screen.getByText("Teriyaki Chicken Casserole"),
+      ).toBeInTheDocument();
     });
 
     expect(screen.getByText(/Ingredients/i)).toBeInTheDocument();
@@ -63,17 +66,19 @@ describe("ItemDetails Component", () => {
 
   it("displays error if meal is not found", async () => {
     apiCalls.itemDetailsApi.mockResolvedValue({ data: { meals: null } });
- 
+
     render(
       <MemoryRouter initialEntries={["/meals/99999"]}>
         <Routes>
           <Route path="/meals/:id" element={<ItemDetailsFunction />} />
         </Routes>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Meal not found. Invalid ID./i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Meal not found. Invalid ID./i),
+      ).toBeInTheDocument();
     });
   });
 
@@ -85,11 +90,13 @@ describe("ItemDetails Component", () => {
         <Routes>
           <Route path="/meals/:id" element={<ItemDetailsFunction />} />
         </Routes>
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/Failed to fetch meal details./i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Failed to fetch meal details./i),
+      ).toBeInTheDocument();
     });
   });
 });

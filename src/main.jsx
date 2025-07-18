@@ -11,6 +11,7 @@ import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import AppFunction from "./App.jsx";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
+import Home from "./pages/Home/Home.jsx";
 
 const themeObj = createTheme({
   palette: {
@@ -67,6 +68,21 @@ const router = createBrowserRouter([
     element: <PageNotFoundFunction />,
   },
 ]);
+
+// it() => {
+//   mockLocalSTorage = () => email{}
+//   mockAPI() => return mockData;
+//   <P store={{}}>
+//     renderMainjSX();
+//   </P>
+//   mockHistory.push(/wishlist)
+//   expect path to be /wishlist
+//   expect cards to be rendered with mockData
+//   remove from wishlist
+//   not to be or query by null -> card removed?
+//   click Home
+//   expect path to be on home && home container
+// }
 
 createRoot(document.getElementById("root")).render(
   <ErrorBoundary>
